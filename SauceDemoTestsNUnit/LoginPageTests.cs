@@ -28,6 +28,19 @@ namespace SauceDemoTestsNUnit
             Assert.That(productsTitleVisible, Is.True);
         }
 
+        [Test]
+        public void LoginPage_DisplaysLockedOutError_WhenLoggingInAsLockedUser()
+        {
+            var expectedErrorText = "user has been locked out";
+
+            _loginPage.LoginAs("locked_out_user");
+            var lockedOutErrorDisplayed = _loginPage.ErrorLabel.Displayed;
+            var lockedOutErrorText = _loginPage.ErrorLabel.Text;
+            var errorMessageContainsExpectedText = lockedOutErrorText.Contains(expectedErrorText);
+
+            Assert.That((lockedOutErrorDisplayed && errorMessageContainsExpectedText), Is.True);
+        }
+
         [TearDown]
         public void TearDown()
         {
