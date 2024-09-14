@@ -52,10 +52,10 @@ namespace SauceDemoTestsNUnit
         public void LoginPage_RedirectsToProductPageInLessThanThreeSeconds_AfterSuccessfulLogin(string username)
         {
             var maxLoadTime = TimeSpan.FromSeconds(3);
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             _loginPage.LoginAs(username);
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
             wait.Until(_driver => _loginPage.ProductsTitle.Displayed);
             var actualLoadingTime = TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds);
             
