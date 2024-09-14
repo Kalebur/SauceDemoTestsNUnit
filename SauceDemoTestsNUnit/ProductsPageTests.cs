@@ -69,6 +69,30 @@ namespace SauceDemoTestsNUnit
             Assert.That(addToCartButtonForEachProduct, Is.True);
         }
 
+        [Test]
+        public void ProductsPage_IncreasesCartItemCount_WhenClickingAddToCartButton()
+        {
+            _loginPage.LoginAs("standard_user");
+            int currentItemCount;
+            int startingItemCount;
+
+            try
+            {
+                var cartItemCount = _productsPage.ShoppingCartItemCount.Text;
+                currentItemCount = int.Parse(cartItemCount);
+                startingItemCount = currentItemCount;
+            }
+            catch (NoSuchElementException)
+            {
+                startingItemCount = 0;
+            }
+
+            _productsPage.AddToCartButtons[0].Click();
+            currentItemCount = int.Parse(_productsPage.ShoppingCartItemCount.Text);
+
+            Assert.That(currentItemCount, Is.EqualTo(startingItemCount + 1));
+        }
+
         [TearDown]
         public void Teardown()
         {
