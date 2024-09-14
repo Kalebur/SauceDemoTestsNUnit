@@ -25,6 +25,27 @@ namespace SauceDemoTestsNUnit
             Assert.That(itemCount, Is.AtLeast(1));
         }
 
+        [Test]
+        public void ProductsPage_ContainsAPriceForEachProduct()
+        {
+            _loginPage.LoginAs("standard_user");
+            var pricesIncludedForAllProducts = true;
+
+            foreach (var product in _productsPage.InventoryItems)
+            {
+                var priceText = string.Join("", 
+                    product.FindElement(By.CssSelector(".inventory_item_price")).Text.Skip(1));
+                var priceIncluded = decimal.TryParse(priceText, out decimal price);
+                if (!(priceIncluded && price >= 0))
+                {
+                    pricesIncludedForAllProducts = false;
+                    break;
+                }
+            }
+
+            Assert.That(pricesIncludedForAllProducts, Is.True);
+        }
+
         [TearDown]
         public void Teardown()
         {
