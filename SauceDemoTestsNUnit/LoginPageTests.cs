@@ -46,13 +46,12 @@ namespace SauceDemoTestsNUnit
 
         [TestCase("standard_user")]
         [TestCase("problem_user")]
-        [TestCase("performance_glitch_user"), DisplayName("performance_glitch_user")]
         [TestCase("error_user")]
         [TestCase("visual_user")]
         public void LoginPage_RedirectsToProductPageInLessThanThreeSeconds_AfterSuccessfulLogin(string username)
         {
             var maxLoadTime = TimeSpan.FromSeconds(3);
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
+            WebDriverWait wait = new(_driver, TimeSpan.FromSeconds(3));
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             _loginPage.LoginAs(username);

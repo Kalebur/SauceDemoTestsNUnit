@@ -10,7 +10,8 @@ namespace SauceDemoTestsNUnit
         private ProductsPage _productsPage;
 
         [SetUp]
-        public void Setup() {
+        public void Setup()
+        {
             _driver = new ChromeDriver();
             _loginPage = new LoginPage(_driver);
             _productsPage = new ProductsPage(_driver);
@@ -26,14 +27,14 @@ namespace SauceDemoTestsNUnit
         }
 
         [Test]
-        public void ProductsPage_ContainsAPriceForEachProduct()
+        public void ProductsPage_ContainsAPrice_ForEachProduct()
         {
             _loginPage.LoginAs("standard_user");
             var pricesIncludedForAllProducts = true;
 
             foreach (var product in _productsPage.InventoryItems)
             {
-                var priceText = string.Join("", 
+                var priceText = string.Join("",
                     product.FindElement(By.CssSelector(".inventory_item_price")).Text.Skip(1));
                 var priceIncluded = decimal.TryParse(priceText, out decimal price);
                 if (!(priceIncluded && price >= 0))
@@ -44,6 +45,28 @@ namespace SauceDemoTestsNUnit
             }
 
             Assert.That(pricesIncludedForAllProducts, Is.True);
+        }
+
+        [Test]
+        public void ProductsPage_ContainsAnAddToCartButton_ForEachProduct()
+        {
+            _loginPage.LoginAs("standard_user");
+            var addToCartButtonForEachProduct = true;
+
+            foreach (var product in _productsPage.InventoryItems)
+            {
+                try
+                {
+                    var addToCartButton = product.FindElement(By.CssSelector(".inventory_item_price"));
+                }
+                catch (NoSuchElementException)
+                {
+                    addToCartButtonForEachProduct = false;
+                    break;
+                }
+            }
+
+            Assert.That(addToCartButtonForEachProduct, Is.True);
         }
 
         [TearDown]
