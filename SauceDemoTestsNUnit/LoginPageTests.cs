@@ -1,5 +1,8 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace SauceDemoTestsNUnit
 {
@@ -39,6 +42,24 @@ namespace SauceDemoTestsNUnit
             var errorMessageContainsExpectedText = lockedOutErrorText.Contains(expectedErrorText);
 
             Assert.That((lockedOutErrorDisplayed && errorMessageContainsExpectedText), Is.True);
+        }
+
+        [TestCase("standard_user")]
+        [TestCase("problem_user")]
+        [TestCase("performance_glitch_user"), DisplayName("performance_glitch_user")]
+        [TestCase("error_user")]
+        [TestCase("visual_user")]
+        public void LoginPage_RedirectsToProductPageInLessThanThreeSeconds_AfterSuccessfulLogin(string username)
+        {
+            var maxLoadTime = TimeSpan.FromSeconds(3);
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            _loginPage.LoginAs(username);
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
+            wait.Until(_driver => _loginPage.ProductsTitle.Displayed);
+            var actualLoadingTime = TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds);
+            
+            Assert.That(actualLoadingTime, Is.AtMost(maxLoadTime));
         }
 
         [TearDown]
