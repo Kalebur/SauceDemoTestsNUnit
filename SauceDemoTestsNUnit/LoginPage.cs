@@ -15,5 +15,14 @@ namespace SauceDemoTestsNUnit
         public IWebElement PasswordTextbox => _driver.FindElement(By.Id("password"));
         public IWebElement LoginButton => _driver.FindElement(By.Id("login-button"));
         public IWebElement ProductsTitle => _driver.FindElement(By.XPath("//span[@class='title']"));
+        public IWebElement ErrorLabel => _driver.FindElement(By.XPath("//div[@class='error-message-container error']//h3"));
+
+        public void LoginAs(string username, string password = "secret_sauce")
+        {
+            _driver.Navigate().GoToUrl(Url);
+            UsernameTextbox.SendKeys(username);
+            PasswordTextbox.SendKeys(password);
+            LoginButton.Click();
+        }
     }
 }

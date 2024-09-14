@@ -22,15 +22,10 @@ namespace SauceDemoTestsNUnit
         [TestCase("visual_user")]
         public void LoginPage_RedirectsToAProductsPage_WhenCorrectlyLoggingIn(string username)
         {
-            var password = "secret_sauce";
-
-            _driver.Navigate().GoToUrl(_loginPage.Url);
-            _loginPage.UsernameTextbox.SendKeys(username);
-            _loginPage.PasswordTextbox.SendKeys(password);
-            _loginPage.LoginButton.Click();
+            _loginPage.LoginAs(username);
             var productsTitleVisible = _loginPage.ProductsTitle.Displayed;
 
-            Assert.IsTrue(productsTitleVisible);
+            Assert.That(productsTitleVisible, Is.True);
         }
 
         [TearDown]
