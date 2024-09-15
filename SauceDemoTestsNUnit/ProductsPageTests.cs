@@ -93,6 +93,31 @@ namespace SauceDemoTestsNUnit
             Assert.That(currentItemCount, Is.EqualTo(startingItemCount + 1));
         }
 
+        [Test]
+        public void ProductsPage_DecreasesCartItemCount_WhenRemovingItemFromCart()
+        {
+            _loginPage.LoginAs("standard_user");
+            int currentItemCount;
+
+            // Add first item on page to cart
+            _productsPage.AddToCartButtons[0].Click();
+            currentItemCount = int.Parse(_productsPage.ShoppingCartItemCount.Text);
+            // Remove previously added item from cart
+            _productsPage.AddToCartButtons[0].Click();
+
+            try
+            {
+                currentItemCount = int.Parse(_productsPage.ShoppingCartItemCount.Text);
+            }
+            catch (NoSuchElementException)
+            {
+                currentItemCount = 0;
+            }
+
+
+            Assert.That(currentItemCount, Is.EqualTo(0));
+        }
+
         [TearDown]
         public void Teardown()
         {
