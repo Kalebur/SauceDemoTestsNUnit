@@ -8,6 +8,7 @@ namespace SauceDemoTestsNUnit
         private IWebDriver _driver;
         private LoginPage _loginPage;
         private ProductsPage _productsPage;
+        private readonly string _defaultUser = "standard_user";
 
         [SetUp]
         public void Setup()
@@ -20,7 +21,7 @@ namespace SauceDemoTestsNUnit
         [Test]
         public void ProductsPage_DisplaysAtLeastOneProduct_ToLoggedInUsers()
         {
-            _loginPage.LoginAs("standard_user");
+            _loginPage.LoginAs(_defaultUser);
             var itemCount = _productsPage.InventoryItems.Count;
 
             Assert.That(itemCount, Is.AtLeast(1));
@@ -29,7 +30,7 @@ namespace SauceDemoTestsNUnit
         [Test]
         public void ProductsPage_ContainsAPrice_ForEachProduct()
         {
-            _loginPage.LoginAs("standard_user");
+            _loginPage.LoginAs(_defaultUser);
             var pricesIncludedForAllProducts = true;
 
             foreach (var product in _productsPage.InventoryItems)
@@ -50,7 +51,7 @@ namespace SauceDemoTestsNUnit
         [Test]
         public void ProductsPage_ContainsAnAddToCartButton_ForEachProduct()
         {
-            _loginPage.LoginAs("standard_user");
+            _loginPage.LoginAs(_defaultUser);
             var addToCartButtonForEachProduct = true;
 
             foreach (var product in _productsPage.InventoryItems)
@@ -72,7 +73,7 @@ namespace SauceDemoTestsNUnit
         [Test]
         public void ProductsPage_IncreasesCartItemCount_WhenClickingAddToCartButton()
         {
-            _loginPage.LoginAs("standard_user");
+            _loginPage.LoginAs(_defaultUser);
             int currentItemCount;
             int startingItemCount;
 
@@ -96,13 +97,11 @@ namespace SauceDemoTestsNUnit
         [Test]
         public void ProductsPage_DecreasesCartItemCount_WhenRemovingItemFromCart()
         {
-            _loginPage.LoginAs("standard_user");
+            _loginPage.LoginAs(_defaultUser);
             int currentItemCount;
 
-            // Add first item on page to cart
+            // Add and remove the first item on page to cart
             _productsPage.AddToCartButtons[0].Click();
-            currentItemCount = int.Parse(_productsPage.ShoppingCartItemCount.Text);
-            // Remove previously added item from cart
             _productsPage.AddToCartButtons[0].Click();
 
             try
@@ -116,6 +115,26 @@ namespace SauceDemoTestsNUnit
 
 
             Assert.That(currentItemCount, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ProductsPage_ContainsOneImage_ForEachProduct()
+        {
+            _loginPage.LoginAs(_defaultUser);
+
+            foreach (var item in _productsPage.InventoryItems)
+            {
+                try
+                {
+                    _ = item.FindElement(By.XPath(".//img"));
+                }
+                catch (NoSuchElementException)
+                {
+                    Assert.Fail();
+                }
+            }
+
+            Assert.Pass();
         }
 
         [TearDown]
