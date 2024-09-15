@@ -130,7 +130,7 @@ namespace SauceDemoTestsNUnit
                 }
                 catch (NoSuchElementException)
                 {
-                    Assert.Fail();
+                    Assert.Fail("Not all products have an image.");
                 }
             }
 
