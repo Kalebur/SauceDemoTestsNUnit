@@ -137,6 +137,22 @@ namespace SauceDemoTestsNUnit
             Assert.Pass();
         }
 
+        [Test]
+        public void ProductsPage_ContainsLinkToProductDetailPage_ForEachProduct()
+        {
+            _loginPage.LoginAs(_defaultUser);
+
+            foreach (var product in _productsPage.ProductTitleLinks)
+            {
+                if (!product.GetAttribute("href").Contains("inventory.html"))
+                {
+                    Assert.Fail();
+                }
+            }
+
+            Assert.Pass();
+        }
+
         [TearDown]
         public void Teardown()
         {
