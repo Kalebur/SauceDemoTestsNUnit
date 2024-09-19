@@ -18,5 +18,6 @@ namespace SauceDemoTestsNUnit
         public IWebElement ShoppingCartItemCount => _driver.FindElement(By.CssSelector(".shopping_cart_badge"));
         public IList<IWebElement> AddToCartButtons => InventoryList.FindElements(By.XPath(".//button[contains(@class, 'btn_inventory')]"));
         public IList<IWebElement> ProductTitleLinks => InventoryList.FindElements(By.XPath("//a[contains(@id, 'title_link')]"));
+        public IWebElement BackToProductsLink => _driver.FindElement(By.Id("back-to-products"));
     }
 }

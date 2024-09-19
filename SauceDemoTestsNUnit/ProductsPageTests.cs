@@ -153,6 +153,25 @@ namespace SauceDemoTestsNUnit
             Assert.Pass();
         }
 
+        [Test]
+        public void ProductDetailsPage_ContainsALinkBackToMainProductList()
+        {
+            IWebElement? backLink = null;
+            _loginPage.LoginAs(_defaultUser);
+            _productsPage.ProductTitleLinks[0].Click();
+
+            try
+            {
+                backLink = _productsPage.BackToProductsLink;
+            }
+            catch (NoSuchElementException)
+            {
+                Assert.Fail();
+            }
+
+            Assert.That(backLink, Is.Not.Null);
+        }
+
         [TearDown]
         public void Teardown()
         {
